@@ -7,6 +7,7 @@ require('dotenv').config();
 const sqlite3 = require('sqlite3').verbose();
 const jwt = require('jsonwebtoken')
 const validateUserSSN = require('./userValidator')
+const getUserAssets = require('./getUserAssets')
 const port = 3000
 
 // Parse JSON bodies
@@ -104,8 +105,36 @@ app.post('/asset', async(req, res) => {
       }
 })
 
+app.post('/transferAsset', async (req, res) => {
+    const access_token = req.body.access_token;
+    try {
+        jwt.verify(access_token, process.env.ENCRYPTION_KEY);
+        //token is valid
+        const new_asset_data = {
+            asset_type : req.body.asset_type,
+            asset_id : req.body.asset_id,
+            asset_owner_ssn : req.body.owner_ssn
+        }
+        if(await validateUserSSN(db, req.body.owner_ssn) === true){
+            chain.addNewBlock(new Block(new_asset_data));
+            console.log(chain);
+            return res.status(200).json("Asset Creation SuccessFull");
+        }
+        else{
+            return res.status(403).json("specified SSN does not exists");
+        }
+
+      } catch (err) {
+        if (err.name === 'TokenExpiredError') {
+          return res.status(401).send("access Token Expired"); // Token is expired
+        } else {
+            return res.status(402).send("error: " + err);
+        }
+      }
+})
+
 //Login API:
-app.put('/login', (req, res) => {
+app.post('/login', (req, res) => {
     const user_details = {
         username : req.body.username,
         password : req.body.password
@@ -121,7 +150,10 @@ app.put('/login', (req, res) => {
                     return res.status(401).json({ message: 'Invalid username or password' });
                 }
                 const token = jwt.sign(user_details, process.env.ENCRYPTION_KEY, { expiresIn: '30m' })
-                res.status(200).json({access_key: token});
+                const ssn = row.SSN;
+                const block_data = chain.getBlockData();
+                const user_assets = getUserAssets(block_data, ssn);
+                res.status(200).json({access_key: token, user_assets: user_assets});
             }
         })
     }
@@ -137,6 +169,10 @@ app.get('/test', (req, res) => {
         asset_name: asset.asset_name,
         asset_price: asset.asset_price
     });
+})
+
+app.get('/blockchain', (req, res) => {
+    res.status(200).send(chain.display());
 })
 
 app.listen(port, () => {

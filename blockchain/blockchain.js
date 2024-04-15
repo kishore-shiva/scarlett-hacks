@@ -51,6 +51,15 @@ class BlockChain {
         }
     }
 
+    getBlockData(){
+        let data = [];
+        for(let i = 0; i < this.blockchain.length; i++){
+            data.push(this.blockchain[i].data);
+        }
+        console.log(data);
+        return data;
+    }
+
     detect51PercentAttack(){
         let count = 0;
         for(let i = 0; i < this.blockchain.length; i++){
