@@ -8,6 +8,7 @@ const sqlite3 = require('sqlite3').verbose();
 const jwt = require('jsonwebtoken')
 const validateUserSSN = require('./userValidator')
 const getUserAssets = require('./getUserAssets')
+const getAssetDatabyID = require('./getAssetDatabyID')
 const port = 3000
 
 // Parse JSON bodies
@@ -110,15 +111,25 @@ app.post('/transferAsset', async (req, res) => {
     try {
         jwt.verify(access_token, process.env.ENCRYPTION_KEY);
         //token is valid
-        const new_asset_data = {
-            asset_type : req.body.asset_type,
-            asset_id : req.body.asset_id,
-            asset_owner_ssn : req.body.owner_ssn
-        }
-        if(await validateUserSSN(db, req.body.owner_ssn) === true){
+        // const new_asset_data = {
+        //     asset_type : req.body.asset_type,
+        //     asset_id : req.body.asset_id,
+        //     asset_buyer_ssn : req.body.buyer_ssn,
+        // }
+        if(await validateUserSSN(db, req.body.buyer_ssn) === true){
+
+            const block_data = chain.getBlockData();
+            const asset_data = getAssetDatabyID(block_data, req.body.asset_id)
+            const new_asset_data = {
+                asset_type : asset_data.asset_type,
+                asset_name : asset_data.asset_name,
+                asset_id : asset_data.asset_id,
+                asset_price : asset_data.asset_price,
+                asset_owner_ssn : req.body.buyer_ssn
+            }
             chain.addNewBlock(new Block(new_asset_data));
             console.log(chain);
-            return res.status(200).json("Asset Creation SuccessFull");
+            return res.status(200).json("Asset Transfer SuccessFull");
         }
         else{
             return res.status(403).json("specified SSN does not exists");
