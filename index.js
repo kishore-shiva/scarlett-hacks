@@ -128,7 +128,8 @@ app.post('/transferAsset', async (req, res) => {
                 asset_owner_ssn : req.body.buyer_ssn
             }
             chain.addNewBlock(new Block(new_asset_data));
-            console.log(chain);
+            console.log("Updated Blockchain: ", chain);
+            console.log("Updated Blockchain Data: ", chain.display());
             return res.status(200).json("Asset Transfer SuccessFull");
         }
         else{
