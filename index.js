@@ -9,10 +9,12 @@ const jwt = require('jsonwebtoken')
 const validateUserSSN = require('./userValidator')
 const getUserAssets = require('./getUserAssets')
 const getAssetDatabyID = require('./getAssetDatabyID')
+const cors = require('cors');
 const port = 3000
 
 // Parse JSON bodies
 app.use(bodyParser.json());
+app.use(cors());
 
 // Create or open a database file
 const db = new sqlite3.Database('mydatabase.db', (err) => {

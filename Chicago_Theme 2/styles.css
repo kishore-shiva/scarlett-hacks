@@ -1,0 +1,70 @@
+.hero {
+    position: relative;
+    overflow: hidden;
+    height: 100vh; /* Set hero section height to viewport height */
+  }
+  .slick-slider,.slick-slider1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%; /* Set slider height to match hero section height */
+  }
+  .slick-slider img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensure images cover the entire slider area */
+  }
+  .slick-slider1 img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensure images cover the entire slider area */
+  }
+  .hero-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 1; /* Ensure content is on top of the slider */
+    color: #fff; /* Change text color for better visibility */
+  }
+  .herohero-content {
+    text-align: center;
+    z-index: 1;
+    color: #fff;
+    position: relative;
+    margin-top: 3rem;
+    height: auto;
+  }
+
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+  }
+
+  .black_overlay {
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 1rem;
+    padding: 2rem;
+  }
+  
+  .card {
+    background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent white background for card */
+  }
+  .welcome_box_login{
+    margin: 4rem 1rem 4rem 1rem;
+  }
+
+  .iwanthere{
+    margin: 6rem 1rem 6rem 1rem;
+  }
+
+  .table-display{
+    background-color: rgba(0, 0, 0, 0.8) !important;
+  }
